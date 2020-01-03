@@ -1,4 +1,4 @@
-package com.imooc.rabbitmqapi.quickstart;
+package com.imooc.quickstart;
 
 import com.rabbitmq.client.*;
 

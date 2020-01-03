@@ -1,4 +1,4 @@
-package com.imooc.ack;
+package com.imooc.dlx;
 
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
@@ -9,7 +9,6 @@ import java.io.IOException;
 
 public class MyConsumer extends DefaultConsumer {
     private Channel channel;
-
     /**
      * Constructs a new instance and records its association to the passed-in channel.
      *
@@ -25,17 +24,13 @@ public class MyConsumer extends DefaultConsumer {
                                Envelope envelope,
                                AMQP.BasicProperties properties,
                                byte[] body)
-            throws IOException {
-        System.out.println("-----consume message-----");
-        System.out.println("consumerTag：" + consumerTag);
-        System.out.println("envelope：" + envelope);
-        System.out.println("body：" + new String(body));
-        if ((Integer) properties.getHeaders().get("num") == 0) {
-            //requeue为true时：数据回到队列尾一直消费，basicNack也是ack的一种，算ack了
-            channel.basicNack(envelope.getDeliveryTag(), false, false);
-        }else {
-            channel.basicAck(envelope.getDeliveryTag(), false);
-        }
-
+            throws IOException
+    {
+        /*System.out.println("-----consume message-----");
+        System.out.println("consumerTag："+consumerTag);
+        System.out.println("envelope："+envelope);
+        System.out.println("properties："+properties);*/
+        System.out.println("body："+new String(body));
+        channel.basicReject(envelope.getDeliveryTag(), false);
     }
 }
