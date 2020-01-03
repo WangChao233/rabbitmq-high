@@ -28,6 +28,6 @@ public class Consumer {
         //创建消费者
         MyConsumer myConsumer = new MyConsumer(channel);
         //设置channel
-        channel.basicConsume(queueName,true,myConsumer);
+        channel.basicConsume(queueName,false,myConsumer);
     }
 }

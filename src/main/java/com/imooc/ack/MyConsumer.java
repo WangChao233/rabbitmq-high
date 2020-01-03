@@ -8,6 +8,8 @@ import com.rabbitmq.client.Envelope;
 import java.io.IOException;
 
 public class MyConsumer extends DefaultConsumer {
+    private Channel channel;
+
     /**
      * Constructs a new instance and records its association to the passed-in channel.
      *
@@ -15,6 +17,7 @@ public class MyConsumer extends DefaultConsumer {
      */
     public MyConsumer(Channel channel) {
         super(channel);
+        this.channel = channel;
     }
 
     @Override
@@ -22,12 +25,15 @@ public class MyConsumer extends DefaultConsumer {
                                Envelope envelope,
                                AMQP.BasicProperties properties,
                                byte[] body)
-            throws IOException
-    {
+            throws IOException {
         System.out.println("-----consume message-----");
-        System.out.println("consumerTag："+consumerTag);
-        System.out.println("envelope："+envelope);
-        System.out.println("properties："+properties);
-        System.out.println("body："+new String(body));
+        System.out.println("consumerTag：" + consumerTag);
+        System.out.println("envelope：" + envelope);
+        System.out.println("body：" + new String(body));
+        if ((Integer) properties.getHeaders().get("num") == 0) {
+            channel.basicNack(envelope.getDeliveryTag(), false, false);
+        }else {
+            channel.basicAck(envelope.getDeliveryTag(), false);
+        }
     }
 }

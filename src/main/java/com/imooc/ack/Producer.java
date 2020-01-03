@@ -23,17 +23,17 @@ public class Producer {
 
         String exchangeName = "test_ack_exchange";
         String routingKey = "ack.save";
-        Map<String, Object> headers = new HashMap<>(16);
-        headers.put("1", 111);
-        headers.put("2", 222);
-        AMQP.BasicProperties properties = new AMQP.BasicProperties.Builder()
-                .deliveryMode(2)
-                .contentEncoding("UTF-8")
-                .headers(headers)
-                .build();
+
         //通过channle发送数据
         for (int i = 0; i < 5; i++) {
-            String msg = "Hello RabbitMQ Send ack message!";
+            String msg = "Hello RabbitMQ Send ack message!"+i;
+            Map<String, Object> headers = new HashMap<>(16);
+            headers.put("num", i);
+            AMQP.BasicProperties properties = new AMQP.BasicProperties.Builder()
+                    .deliveryMode(2)
+                    .contentEncoding("UTF-8")
+                    .headers(headers)
+                    .build();
             channel.basicPublish(exchangeName, routingKey, properties, msg.getBytes());
         }
     }
